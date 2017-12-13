@@ -14,7 +14,9 @@ module.exports = (req, res) => {
   MongoClient.connect(mongoUrl, (err, db) => {
     db
       .collection("owners")
-      .find({})
+      .aggregate([
+        { $lookup: { from: "pets", localField: "_id", foreignField: "ownerId", as: "pets" } }
+      ])
       .toArray((err, owners) => {
         // Render the template
         res.render("index", {
