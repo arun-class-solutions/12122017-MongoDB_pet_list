@@ -12,4 +12,18 @@ module.exports = (req, res) => {
   // res.render("add_pet", {
   //   owner: ownerObject
   // });
+  MongoClient.connect(mongoUrl, (err, db) => {
+    db
+      .collection("owners")
+      .find({
+        _id: ownerId
+      })
+      .toArray((err, owner) => {
+        res.render("add_pet", {
+          owner: owner[0]
+        });
+
+        db.close();
+      });
+  });
 }
