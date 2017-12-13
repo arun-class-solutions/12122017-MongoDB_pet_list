@@ -13,4 +13,19 @@ module.exports = (req, res) => {
   // res.render("edit_pet", {
   //   pet: petObject
   // });
+
+  MongoClient.connect(mongoUrl, (err, db) => {
+    db
+      .collection("pets")
+      .find({
+        _id: petId
+      })
+      .toArray((err, pet) => {
+        res.render("edit_pet", {
+          pet: pet[0]
+        });
+
+        db.close();
+      });
+  });
 }
